@@ -80,7 +80,7 @@ apply from: '/config.gradle'
 
 
 
-####3.Version Catalogs 管理 （gradle高版本）
+#### 3.Version Catalogs 管理 （gradle高版本）
 
 gradle 目录下 libs.versions.toml
 
