@@ -410,3 +410,23 @@ jobject globalObj = (*env)->NewGlobalRef(env, localObj);
 // 使用完毕后，记得释放全局引用
 (*env)->DeleteGlobalRef(env, globalObj);
 ```
+
+
+
+#### JNI三种引用
+
+**Global引用、Local引用以及weak引用**
+
+* **Local引用**
+
+  JNI中使用`jobject`,`jclass`以及`jstring`等来标志一个Java对象。局部引用可以直接使用`NewLocalRef`创建，虽然局部引用可以在跳出作用域后被回收，但还是希望在不使用的时候调用`DeleteLocalRef`来手动回收掉。
+
+* **Global引用**
+
+  多个地方需要使用的时候就会创建一个全局的引用（`NewGlobalRef`方法创建），显示调用`DeleteGlobalRef`的时候才会失效，不然会一直存在内存中。
+
+* **weak引用**
+
+  弱引用可以使用`NewWeakGlobalRef`的方式申明，区别在于弱引用在内存不足或者紧张的时候会自动回收掉，可能会出现短暂的内存泄露，但不会出现内存溢出的情况。建议不需要使用的时候，手动调用DeleteWeakGlobalRef释放引用。
+
+  

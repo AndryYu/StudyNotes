@@ -1,4 +1,6 @@
-# Gradle 管理依赖
+# 版本管理和APT
+
+###一、Gradle 管理依赖
 
 #### 1.ext
 
@@ -88,3 +90,51 @@ toml文件4个主要部分组成
 2. [libraries] 依赖库别名
 3. [bundles] 依赖包
 4. [plugins] 声明插件
+
+
+
+### 二、APT(Annotation Processing Tool)
+
+只在编译的时候使用，不会打包到apk
+
+* **android-apt**
+
+  在Java时代，代码编译期间我们可以通过注解的方式去生成代码。最开始的时候我们使用android-apt(个人开发者开发的)，只支持javac的方式。
+
+  需要引入插件
+
+  ```groovy
+     classpath'com.neenbedankt.gradle.plugins:android-apt:1.8'
+  ```
+
+* **annotation Processor**
+
+  谷歌在Android Gradle 插件 2.2 出了个APT代替android-apt，就是**annotationProcessor**；可以直接使用不需要引入插件同时支持Javac和Jack的方式编译，其他功能基本与android-apt相同。
+
+  ###### APT的流程上分为
+
+  代码扫描找到注解 -> 根据注解处理操作 -> 生成Java代码
+
+* **kapt**
+
+  顾名思义就是在使用Kotlin进行开发时，使用kapt，annotationProcessor只支持Java
+  使用的时候，需要添加插件
+
+  ```groovy
+    apply plugin: 'kotlin-kapt'
+  ```
+
+  ###### kapt流程上分为
+
+  kotlin源码 -> 生成Java Stubs -> APT(上面那个扫描生成) -> 生成源码
+
+  然后当你的项目用了ButterKnife greendao ARouter  Glide Hilt Dagger等框架，然后又用上了kapt，会发现编译速度变得极其缓慢，究其原因就是在生成Java Stubs 的时候耗费了大量时间
+
+* **ksp**
+
+  就是谷歌新出的为了解决kapt缓慢的方案
+
+  ###### KSP流程上分为
+
+  kotlin源码 -> KSP -> 生成源码
+  少了一个步骤毫无疑问会快了官方说 “速度提高多达2倍”
